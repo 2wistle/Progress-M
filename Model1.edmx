@@ -1,0 +1,560 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище ProgressMModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Водители">
+          <Key>
+            <PropertyRef Name="ID_Водителя" />
+          </Key>
+          <Property Name="ID_Водителя" Type="int" Nullable="false" />
+          <Property Name="Фамилия" Type="nvarchar" MaxLength="50" />
+          <Property Name="Имя" Type="nvarchar" MaxLength="50" />
+          <Property Name="Отчество" Type="nvarchar" MaxLength="50" />
+          <Property Name="Адрес" Type="nvarchar" MaxLength="50" />
+          <Property Name="Телефон" Type="int" />
+          <Property Name="Стаж" Type="int" />
+        </EntityType>
+        <EntityType Name="Маршруты">
+          <Key>
+            <PropertyRef Name="ID_Маршрута" />
+          </Key>
+          <Property Name="ID_Маршрута" Type="int" Nullable="false" />
+          <Property Name="Маршрут" Type="nvarchar" MaxLength="50" />
+          <Property Name="Расстояние_киллометры" Type="int" />
+        </EntityType>
+        <EntityType Name="Операторы">
+          <Key>
+            <PropertyRef Name="ID_Оператора" />
+          </Key>
+          <Property Name="ID_Оператора" Type="int" Nullable="false" />
+          <Property Name="Фамилия" Type="nvarchar" MaxLength="50" />
+          <Property Name="Имя" Type="nvarchar" MaxLength="50" />
+          <Property Name="Отчество" Type="nvarchar" MaxLength="50" />
+          <Property Name="Телефон" Type="int" />
+          <Property Name="Адрес" Type="nvarchar" MaxLength="50" />
+          <Property Name="Стаж" Type="int" />
+        </EntityType>
+        <EntityType Name="Статус">
+          <Key>
+            <PropertyRef Name="ID_Статуса" />
+          </Key>
+          <Property Name="ID_Статуса" Type="int" Nullable="false" />
+          <Property Name="Статус_наряда" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Типы траспорта">
+          <Key>
+            <PropertyRef Name="ID_Типов_Транспорта" />
+          </Key>
+          <Property Name="ID_Типов_Транспорта" Type="int" Nullable="false" />
+          <Property Name="Тип_транспорта" Type="nvarchar" MaxLength="50" />
+          <Property Name="Классификация" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ТипыГрузов">
+          <Key>
+            <PropertyRef Name="ID_груза" />
+          </Key>
+          <Property Name="ID_груза" Type="int" Nullable="false" />
+          <Property Name="Тип_груза" Type="nvarchar" MaxLength="50" />
+          <Property Name="Условия_перевозки" Type="nvarchar" MaxLength="50" />
+          <Property Name="Класс_опасности" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Транспорт">
+          <Key>
+            <PropertyRef Name="ID_Транспорта" />
+          </Key>
+          <Property Name="ID_Транспорта" Type="int" Nullable="false" />
+          <Property Name="Марка" Type="nvarchar" MaxLength="50" />
+          <Property Name="Модель" Type="nvarchar" MaxLength="50" />
+          <Property Name="Год_выпуска" Type="int" />
+          <Property Name="Грузоподъемность_тонн" Type="int" />
+          <Property Name="ГосНомер" Type="nvarchar" MaxLength="50" />
+          <Property Name="Тип" Type="int" />
+        </EntityType>
+        <EntityType Name="Учёт">
+          <Key>
+            <PropertyRef Name="ID_Наряда" />
+          </Key>
+          <Property Name="ID_Наряда" Type="int" Nullable="false" />
+          <Property Name="Водитель" Type="int" />
+          <Property Name="Тип_груза" Type="int" />
+          <Property Name="Транспорт" Type="int" />
+          <Property Name="Маршрут" Type="int" />
+          <Property Name="Время_простоя" Type="time" Precision="7" />
+          <Property Name="Дата_отгрузки" Type="datetime" />
+          <Property Name="Дата_прибытия" Type="datetime" />
+          <Property Name="Статус" Type="int" />
+          <Property Name="Оператор" Type="int" />
+          <Property Name="Масса_груза_тонн" Type="int" />
+        </EntityType>
+        <Association Name="FK_Транспорт_Типы траспорта">
+          <End Role="Типы траспорта" Type="Self.Типы траспорта" Multiplicity="0..1" />
+          <End Role="Транспорт" Type="Self.Транспорт" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Типы траспорта">
+              <PropertyRef Name="ID_Типов_Транспорта" />
+            </Principal>
+            <Dependent Role="Транспорт">
+              <PropertyRef Name="Тип" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Учёт_Водители">
+          <End Role="Водители" Type="Self.Водители" Multiplicity="0..1" />
+          <End Role="Учёт" Type="Self.Учёт" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Водители">
+              <PropertyRef Name="ID_Водителя" />
+            </Principal>
+            <Dependent Role="Учёт">
+              <PropertyRef Name="Водитель" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Учёт_Маршруты">
+          <End Role="Маршруты" Type="Self.Маршруты" Multiplicity="0..1" />
+          <End Role="Учёт" Type="Self.Учёт" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Маршруты">
+              <PropertyRef Name="ID_Маршрута" />
+            </Principal>
+            <Dependent Role="Учёт">
+              <PropertyRef Name="Маршрут" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Учёт_Операторы">
+          <End Role="Операторы" Type="Self.Операторы" Multiplicity="0..1" />
+          <End Role="Учёт" Type="Self.Учёт" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Операторы">
+              <PropertyRef Name="ID_Оператора" />
+            </Principal>
+            <Dependent Role="Учёт">
+              <PropertyRef Name="Оператор" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Учёт_Статус">
+          <End Role="Статус" Type="Self.Статус" Multiplicity="0..1" />
+          <End Role="Учёт" Type="Self.Учёт" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Статус">
+              <PropertyRef Name="ID_Статуса" />
+            </Principal>
+            <Dependent Role="Учёт">
+              <PropertyRef Name="Статус" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Учёт_ТипыГрузов">
+          <End Role="ТипыГрузов" Type="Self.ТипыГрузов" Multiplicity="0..1" />
+          <End Role="Учёт" Type="Self.Учёт" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ТипыГрузов">
+              <PropertyRef Name="ID_груза" />
+            </Principal>
+            <Dependent Role="Учёт">
+              <PropertyRef Name="Тип_груза" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Учёт_Транспорт">
+          <End Role="Транспорт" Type="Self.Транспорт" Multiplicity="0..1" />
+          <End Role="Учёт" Type="Self.Учёт" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Транспорт">
+              <PropertyRef Name="ID_Транспорта" />
+            </Principal>
+            <Dependent Role="Учёт">
+              <PropertyRef Name="Транспорт" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище ProgressMModelContainer">
+          <EntitySet Name="Водители" EntityType="Self.Водители" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Маршруты" EntityType="Self.Маршруты" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Операторы" EntityType="Self.Операторы" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Статус" EntityType="Self.Статус" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Типы траспорта" EntityType="Self.Типы траспорта" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ТипыГрузов" EntityType="Self.ТипыГрузов" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Транспорт" EntityType="Self.Транспорт" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Учёт" EntityType="Self.Учёт" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Транспорт_Типы траспорта" Association="Self.FK_Транспорт_Типы траспорта">
+            <End Role="Типы траспорта" EntitySet="Типы траспорта" />
+            <End Role="Транспорт" EntitySet="Транспорт" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Учёт_Водители" Association="Self.FK_Учёт_Водители">
+            <End Role="Водители" EntitySet="Водители" />
+            <End Role="Учёт" EntitySet="Учёт" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Учёт_Маршруты" Association="Self.FK_Учёт_Маршруты">
+            <End Role="Маршруты" EntitySet="Маршруты" />
+            <End Role="Учёт" EntitySet="Учёт" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Учёт_Операторы" Association="Self.FK_Учёт_Операторы">
+            <End Role="Операторы" EntitySet="Операторы" />
+            <End Role="Учёт" EntitySet="Учёт" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Учёт_Статус" Association="Self.FK_Учёт_Статус">
+            <End Role="Статус" EntitySet="Статус" />
+            <End Role="Учёт" EntitySet="Учёт" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Учёт_ТипыГрузов" Association="Self.FK_Учёт_ТипыГрузов">
+            <End Role="ТипыГрузов" EntitySet="ТипыГрузов" />
+            <End Role="Учёт" EntitySet="Учёт" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Учёт_Транспорт" Association="Self.FK_Учёт_Транспорт">
+            <End Role="Транспорт" EntitySet="Транспорт" />
+            <End Role="Учёт" EntitySet="Учёт" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ProgressMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Водители">
+          <Key>
+            <PropertyRef Name="ID_Водителя" />
+          </Key>
+          <Property Name="ID_Водителя" Type="Int32" Nullable="false" />
+          <Property Name="Фамилия" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Имя" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Отчество" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Адрес" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Телефон" Type="Int32" />
+          <Property Name="Стаж" Type="Int32" />
+          <NavigationProperty Name="Учёт" Relationship="Self.FK_Учёт_Водители" FromRole="Водители" ToRole="Учёт" />
+        </EntityType>
+        <EntityType Name="Маршруты">
+          <Key>
+            <PropertyRef Name="ID_Маршрута" />
+          </Key>
+          <Property Name="ID_Маршрута" Type="Int32" Nullable="false" />
+          <Property Name="Маршрут" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Расстояние_киллометры" Type="Int32" />
+          <NavigationProperty Name="Учёт" Relationship="Self.FK_Учёт_Маршруты" FromRole="Маршруты" ToRole="Учёт" />
+        </EntityType>
+        <EntityType Name="Операторы">
+          <Key>
+            <PropertyRef Name="ID_Оператора" />
+          </Key>
+          <Property Name="ID_Оператора" Type="Int32" Nullable="false" />
+          <Property Name="Фамилия" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Имя" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Отчество" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Телефон" Type="Int32" />
+          <Property Name="Адрес" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Стаж" Type="Int32" />
+          <NavigationProperty Name="Учёт" Relationship="Self.FK_Учёт_Операторы" FromRole="Операторы" ToRole="Учёт" />
+        </EntityType>
+        <EntityType Name="Статус">
+          <Key>
+            <PropertyRef Name="ID_Статуса" />
+          </Key>
+          <Property Name="ID_Статуса" Type="Int32" Nullable="false" />
+          <Property Name="Статус_наряда" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Учёт" Relationship="Self.FK_Учёт_Статус" FromRole="Статус" ToRole="Учёт" />
+        </EntityType>
+        <EntityType Name="Типы_траспорта">
+          <Key>
+            <PropertyRef Name="ID_Типов_Транспорта" />
+          </Key>
+          <Property Name="ID_Типов_Транспорта" Type="Int32" Nullable="false" />
+          <Property Name="Тип_транспорта" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Классификация" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Транспорт" Relationship="Self.FK_Транспорт_Типы_траспорта" FromRole="Типы_траспорта" ToRole="Транспорт" />
+        </EntityType>
+        <EntityType Name="ТипыГрузов">
+          <Key>
+            <PropertyRef Name="ID_груза" />
+          </Key>
+          <Property Name="ID_груза" Type="Int32" Nullable="false" />
+          <Property Name="Тип_груза" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Условия_перевозки" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Класс_опасности" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Учёт" Relationship="Self.FK_Учёт_ТипыГрузов" FromRole="ТипыГрузов" ToRole="Учёт" />
+        </EntityType>
+        <EntityType Name="Транспорт">
+          <Key>
+            <PropertyRef Name="ID_Транспорта" />
+          </Key>
+          <Property Name="ID_Транспорта" Type="Int32" Nullable="false" />
+          <Property Name="Марка" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Модель" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Год_выпуска" Type="Int32" />
+          <Property Name="Грузоподъемность_тонн" Type="Int32" />
+          <Property Name="ГосНомер" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Тип" Type="Int32" />
+          <NavigationProperty Name="Типы_траспорта" Relationship="Self.FK_Транспорт_Типы_траспорта" FromRole="Транспорт" ToRole="Типы_траспорта" />
+          <NavigationProperty Name="Учёт" Relationship="Self.FK_Учёт_Транспорт" FromRole="Транспорт" ToRole="Учёт" />
+        </EntityType>
+        <EntityType Name="Учёт">
+          <Key>
+            <PropertyRef Name="ID_Наряда" />
+          </Key>
+          <Property Name="ID_Наряда" Type="Int32" Nullable="false" />
+          <Property Name="Водитель" Type="Int32" />
+          <Property Name="Тип_груза" Type="Int32" />
+          <Property Name="Транспорт" Type="Int32" />
+          <Property Name="Маршрут" Type="Int32" />
+          <Property Name="Время_простоя" Type="Time" Precision="7" />
+          <Property Name="Дата_отгрузки" Type="DateTime" Precision="3" />
+          <Property Name="Дата_прибытия" Type="DateTime" Precision="3" />
+          <Property Name="Статус" Type="Int32" />
+          <Property Name="Оператор" Type="Int32" />
+          <Property Name="Масса_груза_тонн" Type="Int32" />
+          <NavigationProperty Name="Водители" Relationship="Self.FK_Учёт_Водители" FromRole="Учёт" ToRole="Водители" />
+          <NavigationProperty Name="Маршруты" Relationship="Self.FK_Учёт_Маршруты" FromRole="Учёт" ToRole="Маршруты" />
+          <NavigationProperty Name="Операторы" Relationship="Self.FK_Учёт_Операторы" FromRole="Учёт" ToRole="Операторы" />
+          <NavigationProperty Name="Статус1" Relationship="Self.FK_Учёт_Статус" FromRole="Учёт" ToRole="Статус" />
+          <NavigationProperty Name="ТипыГрузов" Relationship="Self.FK_Учёт_ТипыГрузов" FromRole="Учёт" ToRole="ТипыГрузов" />
+          <NavigationProperty Name="Транспорт1" Relationship="Self.FK_Учёт_Транспорт" FromRole="Учёт" ToRole="Транспорт" />
+        </EntityType>
+        <Association Name="FK_Учёт_Водители">
+          <End Role="Водители" Type="Self.Водители" Multiplicity="0..1" />
+          <End Role="Учёт" Type="Self.Учёт" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Водители">
+              <PropertyRef Name="ID_Водителя" />
+            </Principal>
+            <Dependent Role="Учёт">
+              <PropertyRef Name="Водитель" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Учёт_Маршруты">
+          <End Role="Маршруты" Type="Self.Маршруты" Multiplicity="0..1" />
+          <End Role="Учёт" Type="Self.Учёт" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Маршруты">
+              <PropertyRef Name="ID_Маршрута" />
+            </Principal>
+            <Dependent Role="Учёт">
+              <PropertyRef Name="Маршрут" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Учёт_Операторы">
+          <End Role="Операторы" Type="Self.Операторы" Multiplicity="0..1" />
+          <End Role="Учёт" Type="Self.Учёт" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Операторы">
+              <PropertyRef Name="ID_Оператора" />
+            </Principal>
+            <Dependent Role="Учёт">
+              <PropertyRef Name="Оператор" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Учёт_Статус">
+          <End Role="Статус" Type="Self.Статус" Multiplicity="0..1" />
+          <End Role="Учёт" Type="Self.Учёт" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Статус">
+              <PropertyRef Name="ID_Статуса" />
+            </Principal>
+            <Dependent Role="Учёт">
+              <PropertyRef Name="Статус" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Транспорт_Типы_траспорта">
+          <End Role="Типы_траспорта" Type="Self.Типы_траспорта" Multiplicity="0..1" />
+          <End Role="Транспорт" Type="Self.Транспорт" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Типы_траспорта">
+              <PropertyRef Name="ID_Типов_Транспорта" />
+            </Principal>
+            <Dependent Role="Транспорт">
+              <PropertyRef Name="Тип" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Учёт_ТипыГрузов">
+          <End Role="ТипыГрузов" Type="Self.ТипыГрузов" Multiplicity="0..1" />
+          <End Role="Учёт" Type="Self.Учёт" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ТипыГрузов">
+              <PropertyRef Name="ID_груза" />
+            </Principal>
+            <Dependent Role="Учёт">
+              <PropertyRef Name="Тип_груза" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Учёт_Транспорт">
+          <End Role="Транспорт" Type="Self.Транспорт" Multiplicity="0..1" />
+          <End Role="Учёт" Type="Self.Учёт" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Транспорт">
+              <PropertyRef Name="ID_Транспорта" />
+            </Principal>
+            <Dependent Role="Учёт">
+              <PropertyRef Name="Транспорт" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ProgressMEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Водители" EntityType="Self.Водители" />
+          <EntitySet Name="Маршруты" EntityType="Self.Маршруты" />
+          <EntitySet Name="Операторы" EntityType="Self.Операторы" />
+          <EntitySet Name="Статус" EntityType="Self.Статус" />
+          <EntitySet Name="Типы_траспорта" EntityType="Self.Типы_траспорта" />
+          <EntitySet Name="ТипыГрузов" EntityType="Self.ТипыГрузов" />
+          <EntitySet Name="Транспорт" EntityType="Self.Транспорт" />
+          <EntitySet Name="Учёт" EntityType="Self.Учёт" />
+          <AssociationSet Name="FK_Учёт_Водители" Association="Self.FK_Учёт_Водители">
+            <End Role="Водители" EntitySet="Водители" />
+            <End Role="Учёт" EntitySet="Учёт" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Учёт_Маршруты" Association="Self.FK_Учёт_Маршруты">
+            <End Role="Маршруты" EntitySet="Маршруты" />
+            <End Role="Учёт" EntitySet="Учёт" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Учёт_Операторы" Association="Self.FK_Учёт_Операторы">
+            <End Role="Операторы" EntitySet="Операторы" />
+            <End Role="Учёт" EntitySet="Учёт" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Учёт_Статус" Association="Self.FK_Учёт_Статус">
+            <End Role="Статус" EntitySet="Статус" />
+            <End Role="Учёт" EntitySet="Учёт" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Транспорт_Типы_траспорта" Association="Self.FK_Транспорт_Типы_траспорта">
+            <End Role="Типы_траспорта" EntitySet="Типы_траспорта" />
+            <End Role="Транспорт" EntitySet="Транспорт" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Учёт_ТипыГрузов" Association="Self.FK_Учёт_ТипыГрузов">
+            <End Role="ТипыГрузов" EntitySet="ТипыГрузов" />
+            <End Role="Учёт" EntitySet="Учёт" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Учёт_Транспорт" Association="Self.FK_Учёт_Транспорт">
+            <End Role="Транспорт" EntitySet="Транспорт" />
+            <End Role="Учёт" EntitySet="Учёт" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище ProgressMModelContainer" CdmEntityContainer="ProgressMEntities">
+          <EntitySetMapping Name="Водители">
+            <EntityTypeMapping TypeName="ProgressMModel.Водители">
+              <MappingFragment StoreEntitySet="Водители">
+                <ScalarProperty Name="ID_Водителя" ColumnName="ID_Водителя" />
+                <ScalarProperty Name="Фамилия" ColumnName="Фамилия" />
+                <ScalarProperty Name="Имя" ColumnName="Имя" />
+                <ScalarProperty Name="Отчество" ColumnName="Отчество" />
+                <ScalarProperty Name="Адрес" ColumnName="Адрес" />
+                <ScalarProperty Name="Телефон" ColumnName="Телефон" />
+                <ScalarProperty Name="Стаж" ColumnName="Стаж" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Маршруты">
+            <EntityTypeMapping TypeName="ProgressMModel.Маршруты">
+              <MappingFragment StoreEntitySet="Маршруты">
+                <ScalarProperty Name="ID_Маршрута" ColumnName="ID_Маршрута" />
+                <ScalarProperty Name="Маршрут" ColumnName="Маршрут" />
+                <ScalarProperty Name="Расстояние_киллометры" ColumnName="Расстояние_киллометры" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Операторы">
+            <EntityTypeMapping TypeName="ProgressMModel.Операторы">
+              <MappingFragment StoreEntitySet="Операторы">
+                <ScalarProperty Name="ID_Оператора" ColumnName="ID_Оператора" />
+                <ScalarProperty Name="Фамилия" ColumnName="Фамилия" />
+                <ScalarProperty Name="Имя" ColumnName="Имя" />
+                <ScalarProperty Name="Отчество" ColumnName="Отчество" />
+                <ScalarProperty Name="Телефон" ColumnName="Телефон" />
+                <ScalarProperty Name="Адрес" ColumnName="Адрес" />
+                <ScalarProperty Name="Стаж" ColumnName="Стаж" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Статус">
+            <EntityTypeMapping TypeName="ProgressMModel.Статус">
+              <MappingFragment StoreEntitySet="Статус">
+                <ScalarProperty Name="ID_Статуса" ColumnName="ID_Статуса" />
+                <ScalarProperty Name="Статус_наряда" ColumnName="Статус_наряда" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Типы_траспорта">
+            <EntityTypeMapping TypeName="ProgressMModel.Типы_траспорта">
+              <MappingFragment StoreEntitySet="Типы траспорта">
+                <ScalarProperty Name="ID_Типов_Транспорта" ColumnName="ID_Типов_Транспорта" />
+                <ScalarProperty Name="Тип_транспорта" ColumnName="Тип_транспорта" />
+                <ScalarProperty Name="Классификация" ColumnName="Классификация" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ТипыГрузов">
+            <EntityTypeMapping TypeName="ProgressMModel.ТипыГрузов">
+              <MappingFragment StoreEntitySet="ТипыГрузов">
+                <ScalarProperty Name="ID_груза" ColumnName="ID_груза" />
+                <ScalarProperty Name="Тип_груза" ColumnName="Тип_груза" />
+                <ScalarProperty Name="Условия_перевозки" ColumnName="Условия_перевозки" />
+                <ScalarProperty Name="Класс_опасности" ColumnName="Класс_опасности" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Транспорт">
+            <EntityTypeMapping TypeName="ProgressMModel.Транспорт">
+              <MappingFragment StoreEntitySet="Транспорт">
+                <ScalarProperty Name="ID_Транспорта" ColumnName="ID_Транспорта" />
+                <ScalarProperty Name="Марка" ColumnName="Марка" />
+                <ScalarProperty Name="Модель" ColumnName="Модель" />
+                <ScalarProperty Name="Год_выпуска" ColumnName="Год_выпуска" />
+                <ScalarProperty Name="Грузоподъемность_тонн" ColumnName="Грузоподъемность_тонн" />
+                <ScalarProperty Name="ГосНомер" ColumnName="ГосНомер" />
+                <ScalarProperty Name="Тип" ColumnName="Тип" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Учёт">
+            <EntityTypeMapping TypeName="ProgressMModel.Учёт">
+              <MappingFragment StoreEntitySet="Учёт">
+                <ScalarProperty Name="ID_Наряда" ColumnName="ID_Наряда" />
+                <ScalarProperty Name="Водитель" ColumnName="Водитель" />
+                <ScalarProperty Name="Тип_груза" ColumnName="Тип_груза" />
+                <ScalarProperty Name="Транспорт" ColumnName="Транспорт" />
+                <ScalarProperty Name="Маршрут" ColumnName="Маршрут" />
+                <ScalarProperty Name="Время_простоя" ColumnName="Время_простоя" />
+                <ScalarProperty Name="Дата_отгрузки" ColumnName="Дата_отгрузки" />
+                <ScalarProperty Name="Дата_прибытия" ColumnName="Дата_прибытия" />
+                <ScalarProperty Name="Статус" ColumnName="Статус" />
+                <ScalarProperty Name="Оператор" ColumnName="Оператор" />
+                <ScalarProperty Name="Масса_груза_тонн" ColumnName="Масса_груза_тонн" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
